@@ -16,6 +16,22 @@ Advanced PDF parser using **Docling** + **Azure OpenAI GPT-4.1** with **Pydantic
 
 ## 🚀 Quick Start
 
+### 📂 File Structure
+
+```
+├── main.py                   # Main parser script
+├── requirements.txt          # Dependencies
+├── .env                     # Azure credentials (create this)
+├── input/                   # Place PDF files here
+│   └── pdf-example.pdf      # Default input file (script looks for this)
+└── output/                  # Generated markdown files
+    ├── pdf-example_inline.md     # Result with inline images
+    └── pdf-example_enhanced.md   # Result with images at end
+```
+
+**Input:** Script looks for `input/pdf-example.pdf` by default  
+**Output:** Results saved to `output/` with automatic naming based on processing mode
+
 ### Environment Setup
 
 **Option 1: Using UV (recommended)**

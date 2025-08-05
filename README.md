@@ -6,7 +6,7 @@ Collection of PDF parsing tools using different approaches and technologies.
 
 ### Docling-based Parsers
 
-Located in `docling/` directory:
+Located in `parsers/` directory:
 
 - **`multimodal/`** - 🤖 **Advanced PDF Parser with AI Image Analysis**
 
