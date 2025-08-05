@@ -17,16 +17,26 @@ Located in `parsers/` directory:
   - Full-featured parser for production use
 
 - **`simple/`** - 📝 **Minimal Text Parser**
+
   - Basic PDF to markdown conversion
   - Lightweight and fast
   - No AI analysis or advanced features
   - Perfect for simple text extraction
 
+- **`api/`** - 🚀 **FastAPI REST Endpoint**
+
+  - RESTful API with Bearer token authentication
+  - JSON response or direct .md file download
+  - Azure OpenAI GPT-4.1 integration for image analysis
+  - Configurable parameters (images_inline, page_numbers, azure_analysis)
+  - Perfect for web applications and integrations
+
 ## 🚀 Quick Start
 
 Choose the parser that fits your needs:
 
-- **Need AI image analysis?** → Use `multimodal/`
-- **Just want text extraction?** → Use `simple/`
+- **Need REST API?** → Use `api/` (FastAPI server)
+- **Need AI image analysis?** → Use `multimodal/` (CLI)
+- **Just want text extraction?** → Use `simple/` (CLI)
 
 See individual README files in each directory for detailed setup instructions.
