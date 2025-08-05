@@ -245,20 +245,6 @@ Automatic cleanup includes:
 - 📐 Fixes spacing around headings and page markers
 - 🚫 Preserves code block formatting
 
-## � File Structure
-
-```
-├── main_with_images.py      # Main parser with all features
-├── requirements.txt         # Dependencies
-├── README.md               # This documentation
-├── .env                    # Azure credentials (create this)
-├── input/                  # Place PDF files here
-│   └── pdf-example.pdf     # Sample file
-└── output/                 # Generated markdown files
-    ├── pdf-example_inline.md     # Default output
-    └── pdf-example_enhanced.md   # Alternative format
-```
-
 ## 🔮 Future API Endpoint
 
 This parser is designed to be easily converted to an API endpoint. The structured configuration and return values make it perfect for web service integration.
