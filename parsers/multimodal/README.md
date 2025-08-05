@@ -1,6 +1,109 @@
-# 🤖 Advanced PDF Parser with AI Image Analysis
+# 📄 Advanced PDF Parser (CLI)
 
-Advanced PDF parser using **Docling** + **Azure OpenAI GPT-4.1** with **Pydantic structured outputs**. Converts PDF files to enhanced Markdown with intelligent image analysis, automatic page numbering, and desi## 🔮 Future API Endpointrmatting.
+Command-line PDF parser using Docling + Azure OpenAI for document analysis with AI-powered image analysis.
+
+## 📁 Project Structure
+
+This CLI parser uses **shared configuration** with the API:
+
+- `../config.py` - Centralized configuration for all parsers
+- `../pdf_utils.py` - Shared utility functions for PDF processing  
+- `main.py` - Command-line interface
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configure Environment
+
+Create `.env` file in the **parent directory** (`parsers/.env`):
+
+```env
+# Optional: Azure OpenAI for image analysis
+AZURE_API_KEY=your_azure_openai_api_key
+AZURE_API_BASE=https://your_resource.openai.azure.com/
+```
+
+**Note:** Configuration is now centralized in `../config.py` which loads these environment variables.
+
+### 3. Add Your PDF
+
+Place your PDF file in the `input/` directory:
+```
+input/
+  pdf-example.pdf
+  your-document.pdf
+```
+
+### 4. Run Parser
+
+```bash
+uv run main.py input/your-document.pdf
+```
+
+Results will be saved to the `output/` directory.
+
+## 🔧 Configuration
+
+All configuration is managed through the shared `../config.py` file:
+
+### Key Settings:
+
+- **Azure OpenAI**: GPT-4.1 model for intelligent image analysis
+- **Processing**: Smart image analysis prompts that adapt to content
+- **Output**: Page numbering, cleanup options, section headers
+- **Formatting**: Markdown templates and styling
+
+### Modify Behavior:
+
+Edit `../config.py` to customize:
+
+- Image analysis prompts (now intelligently handles trivial vs data-rich images)
+- Output formatting templates
+- File size and processing limits
+- Page numbering and section organization
+
+## 📊 Features
+
+- ✅ **PDF to Markdown** conversion with Docling
+- ✅ **AI Image Analysis** with Azure OpenAI GPT-4.1
+- ✅ **Smart Data Extraction** from tables and charts
+- ✅ **Shared Configuration** with API service
+- ✅ **Table Extraction** and formatting
+- ✅ **Page Number** insertion
+- ✅ **Markdown Cleanup** and optimization
+
+## 💡 Usage Examples
+
+The parser automatically:
+
+1. Extracts text and structure from PDFs
+2. Identifies and analyzes images/charts with AI
+3. Extracts tables and preserves formatting
+4. Links data points to their labels in charts
+5. Generates clean, searchable Markdown
+
+Perfect for:
+
+- Document processing pipelines
+- RAG (Retrieval Augmented Generation) systems
+- Research paper analysis
+- Business document digitization
+
+## � Shared Architecture
+
+This CLI parser shares utilities with the API service, ensuring consistent behavior:
+
+- Same image analysis logic
+- Identical configuration options
+- Shared PDF processing pipeline
+- Common utility functions
+
+Changes to `../config.py` affect both CLI and API automatically.
 
 ## ✨ Features
 
@@ -72,169 +175,134 @@ AZURE_API_BASE=https://your_resource.openai.azure.com/
 
 ## Basic Usage
 
-```python
-from main_with_images import AdvancedPDFParser
+```bash
+# Run with default settings
+uv run main.py input/document.pdf
 
-# Initialize parser
-parser = AdvancedPDFParser()
-
-# Parse PDF with default settings
-result = parser.parse_pdf("input/document.pdf")
-
-# Check results
-if result['success']:
-    print(f"✅ Processed {result['pages_processed']} pages")
-    print(f"🖼️ Analyzed {result['images_processed']} images")
-    print(f"📊 Found {result['tables_processed']} tables")
-    print(f"📝 Output: {result['output_file']}")
+# Or just place your PDF in input/ and run:
+uv run main.py
 ```
+
+The parser will automatically:
+
+1. Extract text and structure from PDFs
+2. Intelligently analyze images (brief for decorative, detailed for data-rich)
+3. Extract tables and preserve formatting
+4. Generate clean, searchable Markdown
+
+Perfect for RAG systems and document processing pipelines.
 
 ## ⚙️ Configuration
 
-All settings are configured at the top of `main_with_images.py`. Simply edit the configuration dictionaries to customize behavior.
+All settings are configured in the shared `../config.py` file. The configuration includes:
 
-### Processing Configuration
+- **Smart Image Analysis**: Automatically adapts analysis depth based on content type
+- **Azure OpenAI Integration**: GPT-4.1 for intelligent image understanding  
+- **Output Formatting**: Customizable templates and cleanup options
+- **Processing Limits**: File size and format validation
 
-```python
-PROCESSING_CONFIG = {
-    "process_images": True,                  # Enable/disable image analysis
-    "max_image_size": 20*1024*1024,         # 20MB max image size
-    "max_pdf_size": 100*1024*1024,          # 100MB max PDF size
-    "images_inline": True,                   # True: inline, False: at end
-    "image_analysis_prompt": "..."           # Custom AI analysis prompt
-}
-```
+### Advanced Configuration
 
-### Output Configuration
+Edit `../config.py` to customize behavior:
 
-```python
-OUTPUT_CONFIG = {
-    "include_page_numbers": True,            # Add page markers like "--- Page 1 ---"
-    "include_tables_section": False,         # Add "## 📊 Tables" section at end
-    "include_images_section": False,         # Add "## 🖼️ Images" section (when not inline)
-    "cleanup_markdown": True,                # Clean up excessive whitespace
-}
-```
+- Modify image analysis prompts
+- Adjust output formatting templates  
+- Set file size limits
+- Configure Azure OpenAI settings
 
-### Template Configuration (🆕 New Feature)
-
-Control exactly what appears in your markdown by editing templates. **Set any template to `""` to disable that element:**
-
-```python
-FORMATTING_CONFIG = {
-    # Page numbering
-    "page_marker_template": "--- Page {page_num} ---",  # Empty = no page markers
-
-    # Image formatting
-    "image_wrapper_start": "<image>",                   # Opening tag
-    "image_wrapper_end": "</image>",                    # Closing tag
-    "image_title_template": "**Image {image_num}:**",   # Empty = no image titles
-
-    # Table formatting
-    "table_header_template": "### Table {table_num}",   # Empty = no table headers
-    "table_size_template": "**Size:** {rows} rows × {cols} columns",
-
-    # Section headers
-    "images_section_header": "## 🖼️ Images and Figures",  # Empty = no section header
-    "tables_section_header": "## 📊 Tables",
-
-    # Cleanup settings
-    "max_consecutive_linebreaks": 2,         # Max consecutive line breaks allowed
-    "normalize_whitespace": True,            # Remove trailing spaces
-    "fix_heading_spacing": True,             # Fix spacing around headings
-}
-```
+The configuration is shared between CLI and API for consistency.
 
 ## 📋 Usage Examples
 
-### Example 1: Clean Output (No Extra Elements)
+### Example 1: Basic Usage
 
-```python
-# Edit FORMATTING_CONFIG in main_with_images.py:
-"page_marker_template": "",                # No page numbers
-"image_title_template": "",                # No image titles
-"table_header_template": "",               # No table headers
+```bash
+# Parse a specific PDF
+uv run main.py input/document.pdf
 
-# Result: Just content with <image>descriptions</image>
+# Parse default PDF (looks for pdf-example.pdf)
+uv run main.py
 ```
 
-### Example 2: Custom Page Markers
+### Example 2: Custom Configuration
 
-```python
-# Finnish page markers
-"page_marker_template": "=== Sivu {page_num} ===",
+Edit `../config.py` to customize:
 
-# Or simple numbers
-"page_marker_template": "Page {page_num}",
+- **Smart image analysis**: Handles trivial vs data-rich images automatically
+- **Output formatting**: Page markers, image titles, section headers
+- **Processing limits**: File sizes, image formats
+- **Azure settings**: API keys, model configuration
 
-# Or disable completely
-"page_marker_template": "",
-```
+### Example 3: Understanding Output
 
-### Example 3: Different Image Formats
+The parser automatically categorizes images:
 
-```python
-# Bold titles (default)
-"image_title_template": "**Image {image_num}:**",
-
-# Simple titles
-"image_title_template": "Image {image_num}:",
-
-# No titles, just descriptions
-"image_title_template": "",
-```
+- **Decorative images**: Brief description (logos, icons, decorations)
+- **Data-rich images**: Full analysis (charts, tables, diagrams)
+- **Simple content**: Moderate detail (screenshots, basic photos)
 
 ## 🏷️ Output Format
 
-### With All Features Enabled
+### Intelligent Image Analysis
+
+The parser now automatically adapts analysis depth:
 
 ```markdown
 ## Document Title
 
 **Image 1:**
 <image>
-Text content: WORLD ECONOMIC FORUM
-Subject matter: Logo of the World Economic Forum organization
+**Type:** [DECORATIVE]
+**Description:** Company logo, no data content.
 </image>
 
 Content continues...
 
+**Image 2:**
+<image>
+#### 1. Content Type
+[CHART: Horizontal Bar Chart]
+
+#### 2. Title/Caption
+**Title:** Market Share Analysis
+**Caption:** Quarterly performance data
+
+#### 3. Extracted Data
+| Product | Q1 | Q2 | Q3 | Q4 |
+|---------|----|----|----|----|
+| Product A | 25% | 30% | 35% | 40% |
+| Product B | 75% | 70% | 65% | 60% |
+
+#### 4. Key Insights
+- Product A shows consistent growth throughout the year
+- Product B shows declining market share
+
+#### 5. Data Quality Notes
+- All values clearly visible
+- No missing data points
+</image>
+
 --- Page 1 ---
 
-## Section Title
-
-More content...
-
---- Page 2 ---
-
-### Table 1
-
-**Size:** 5 rows × 3 columns
-| Header 1 | Header 2 | Header 3 |
-|----------|----------|----------|
-| Data... | Data... | Data... |
-```
-
-### With Minimal Configuration (Clean)
-
-```markdown
-## Document Title
-
-<image>
-Text content: WORLD ECONOMIC FORUM
-Subject matter: Logo of the World Economic Forum organization
-</image>
-
-Content continues without page markers or extra headers...
-
-<image>
-Subject matter: Professional headshot photo
-</image>
-
 More content...
 ```
+
+### Benefits for RAG Systems
+
+- **Trivial images**: Quick processing, no information overload
+- **Data-rich images**: Comprehensive extraction for accurate search
+- **Structured output**: Easy to parse and index for vector databases
 
 ## 🔧 Advanced Features
+
+### Smart Image Analysis
+
+The enhanced image analysis now features:
+
+- 🎯 **Automatic Content Detection**: Distinguishes decorative, simple, and data-rich images
+- 📊 **Structured Data Extraction**: Comprehensive analysis for charts, tables, and diagrams  
+- ⚡ **Efficient Processing**: Brief descriptions for trivial content, detailed analysis when needed
+- 🎨 **Color Recognition**: Notes significant colors in charts and diagrams
 
 ### PDF Validation
 
@@ -261,6 +329,11 @@ Automatic cleanup includes:
 - 📐 Fixes spacing around headings and page markers
 - 🚫 Preserves code block formatting
 
-## 🔮 Future API Endpoint
+## 🔮 Integration Ready
 
-This parser is designed to be easily converted to an API endpoint. The structured configuration and return values make it perfect for web service integration.
+This parser is designed for seamless integration:
+
+- **Shared Configuration**: Same settings work for both CLI and API
+- **Consistent Output**: Identical processing logic across environments  
+- **RAG Optimized**: Perfect for vector databases and search systems
+- **API Ready**: Easy conversion to web service endpoints

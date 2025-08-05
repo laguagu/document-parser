@@ -1,6 +1,47 @@
 # 🚀 PDF Parser API
 
-FastAPI-ba## 📡 API Usage
+FastAPI-based service for converting PDF files to enhanced Markdown with AI image analysis.
+
+## 📁 Project Structure
+
+This API uses **shared configuration** from the parent directory:
+- `../config.py` - Centralized configuration for all parsers
+- `../pdf_utils.py` - Shared utility functions for PDF processing
+- `parser_service.py` - API-specific service logic
+- `main.py` - FastAPI application
+
+## 🚀 Quick Start
+
+### 1. Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+### 2. Configure Environment
+
+Create `.env` file in the **parent directory** (`parsers/.env`):
+
+```env
+# Required: API Authentication
+PDF_PARSER_API_KEY=your-secret-api-key-here
+
+# Optional: Azure OpenAI for image analysis
+AZURE_API_KEY=your_azure_openai_api_key
+AZURE_API_BASE=https://your_resource.openai.azure.com/
+```
+
+**Note:** Configuration is now centralized in `../config.py` which loads these environment variables.
+
+### 3. Start Server
+
+```bash
+python main.py
+```
+
+Server runs at: <http://localhost:8000>
+
+## 📡 API Usage
 
 ### Parse PDF (JSON Response)
 
@@ -26,54 +67,7 @@ curl -X POST "http://localhost:8000/parse-pdf-file" \
 - `images_inline`: Include images inline in markdown (default: true)  
 - `include_page_numbers`: Add page markers (default: false)
 
-**JSON Response:**converting PDF files to enhanced Markdown with AI image analysis.
-
-## 🚀 Quick Start
-
-### 1. Install Dependencies
-
-```bash
-pip install -r requirements.txt
-```
-
-### 2. Configure Environment
-
-Create `.env` file:
-
-```env
-# Required: API Authentication
-PDF_PARSER_API_KEY=your-secret-api-key-here
-
-# Optional: Azure OpenAI for image analysis
-AZURE_API_KEY=your_azure_openai_api_key
-AZURE_API_BASE=https://your_resource.openai.azure.com/
-```
-
-### 3. Start Server
-
-```bash
-python main.py
-```
-
-Server runs at: <http://localhost:8000>
-
-## � API Usage
-
-### Parse PDF
-
-```bash
-curl -X POST "http://localhost:8000/parse-pdf" \
-  -H "Authorization: Bearer your-secret-api-key-here" \
-  -H "Content-Type: multipart/form-data" \
-  -F "file=@document.pdf"
-```
-
-**Parameters:**
-- `azure_analysis`: Use AI for image analysis (default: true)
-- `images_inline`: Include images inline in markdown (default: true)  
-- `include_page_numbers`: Add page markers (default: false)
-
-**Response:**
+**JSON Response:**
 ```json
 {
   "success": true,
@@ -86,10 +80,23 @@ curl -X POST "http://localhost:8000/parse-pdf" \
 }
 ```
 
+## 🔧 Configuration
+
+All configuration is managed through the shared `../config.py` file:
+
+- **Azure OpenAI**: Image analysis with GPT-4.1
+- **Processing**: File size limits, image formats
+- **Output**: Page numbering, cleanup options
+- **Formatting**: Markdown templates and styling
+
+Modify `../config.py` to customize parser behavior across both CLI and API.
+
 ## 📊 Features
 
 - ✅ **PDF to Markdown** conversion with Docling
-- ✅ **AI Image Analysis** with Azure OpenAI GPT-4.1
+- ✅ **AI Image Analysis** with Azure OpenAI GPT-4.1  
+- ✅ **Smart Data Extraction** from tables and charts
+- ✅ **Shared Configuration** with CLI parser
 - ✅ **Table Extraction** from PDF documents
 - ✅ **API Authentication** with Bearer tokens
 - ✅ **Interactive Docs** at `/docs`
